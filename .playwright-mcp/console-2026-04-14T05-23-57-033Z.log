@@ -1,0 +1,6 @@
+[      47ms] [LOG] 🚀 Todo PWA starting... @ http://localhost:3000/app.js:60
+[      50ms] [LOG] ✅ Service Worker registered: http://localhost:3000/ @ http://localhost:3000/app.js:103
+[      50ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:3000/:0
+[      51ms] [LOG] ✅ App ready! @ http://localhost:3000/app.js:77
+[      53ms] [LOG] 📲 PWA install banner ready @ http://localhost:3000/app.js:132
+[      53ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:3000/:0

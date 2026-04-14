@@ -1,0 +1,15 @@
+{
+  "name": "vapid-indexed-pwa",
+  "version": "1.0.0",
+  "description": "Simple Todo PWA with camera, location, IndexedDB, and VAPID push notifications",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "web-push": "^3.6.7"
+  }
+}

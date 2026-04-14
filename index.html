@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    viewport meta tag: makes the page look correct on mobile phones.
+    Without this, phones zoom out to show the full desktop version.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Todo PWA</title>
+
+  <!--
+    manifest.json tells the browser this is a PWA (Progressive Web App).
+    It contains the app name, icons, and display settings.
+    This is what triggers the "Add to Home Screen" / install banner.
+  -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!--
+    theme-color: changes the browser address bar color on mobile.
+    Must match the theme_color in manifest.json.
+  -->
+  <meta name="theme-color" content="#4CAF50">
+
+  <!-- Apple-specific PWA tags (for iOS Safari) -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TodoPWA">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <!-- Favicon: use SVG icon to avoid 404 -->
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <h1 class="header__title">📝 Todo PWA</h1>
+
+    <!--
+      Bell button: asks the user for permission to send push notifications.
+      The icon changes based on permission state.
+    -->
+    <button id="btn-notify" class="btn btn--icon" title="Enable notifications">
+      🔔
+    </button>
+  </header>
+
+  <!--
+    Install Banner: appears when the browser detects the app can be installed.
+    Hidden by default (CSS: display:none), shown by JavaScript when ready.
+  -->
+  <div id="install-banner" class="install-banner" style="display:none;">
+    <span>📲 Install this app on your device!</span>
+    <div class="install-banner__buttons">
+      <button id="btn-install" class="btn btn--primary btn--sm">Install</button>
+      <button id="btn-install-dismiss" class="btn btn--sm">Later</button>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- ── Add Todo Form ──────────────────────────────────────────────── -->
+    <section class="card" id="add-form-section">
+      <h2 class="section-title">Add New Todo</h2>
+
+      <form id="todo-form" novalidate>
+
+        <!-- Camera / Photo Input -->
+        <div class="form-group">
+          <label class="form-label" for="input-image">📷 Photo</label>
+
+          <!--
+            type="file" with accept="image/*" and capture="camera":
+            - On mobile: opens the camera directly
+            - On desktop: opens the file picker
+            capture="camera" means "prefer the camera over file browser"
+          -->
+          <input
+            type="file"
+            id="input-image"
+            accept="image/*"
+            capture="camera"
+            class="file-input"
+          >
+
+          <label for="input-image" class="btn btn--secondary btn--full">
+            📷 Take Photo / Choose Image
+          </label>
+
+          <!-- Preview of the selected image. Hidden until a photo is chosen. -->
+          <div id="image-preview-wrapper" style="display:none;">
+            <img id="image-preview" class="image-preview" alt="Selected photo preview">
+            <button type="button" id="btn-remove-image" class="btn btn--danger btn--sm">
+              ✕ Remove photo
+            </button>
+          </div>
+        </div>
+
+        <!-- Description Input -->
+        <div class="form-group">
+          <label class="form-label" for="input-desc">📝 Description</label>
+          <textarea
+            id="input-desc"
+            class="textarea"
+            placeholder="What do you need to do?"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label class="form-label">📍 Location</label>
+
+          <!--
+            Clicking this button triggers the browser's location permission dialog.
+            navigator.geolocation is a browser API — like PHP's $_SERVER['REMOTE_ADDR']
+            but much more accurate.
+          -->
+          <button type="button" id="btn-get-location" class="btn btn--secondary">
+            📍 Get My Location
+          </button>
+
+          <!-- Shows the detected location after the user clicks the button -->
+          <div id="location-display" class="location-display" style="display:none;">
+            <span id="location-text"></span>
+            <button type="button" id="btn-clear-location" class="btn btn--danger btn--sm">✕</button>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn--primary btn--full">
+          ✅ Add Todo
+        </button>
+
+      </form>
+    </section>
+
+    <!-- ── Todo List ──────────────────────────────────────────────────── -->
+    <section class="card" id="todo-list-section">
+      <h2 class="section-title">
+        My Todos
+        <span id="todo-count" class="badge">0</span>
+      </h2>
+
+      <!-- Status message shown when there are no todos yet -->
+      <p id="empty-message" class="empty-message">
+        No todos yet. Add one above! 👆
+      </p>
+
+      <!--
+        Todo items will be inserted here by JavaScript.
+        Each item is a <div class="todo-item"> created in app.js
+      -->
+      <div id="todo-list"></div>
+    </section>
+
+    <!-- ── Push Test Panel ────────────────────────────────────────────── -->
+    <!--
+      This panel lets you test sending a push notification from the server.
+      In a real app, notifications would be triggered by events (new task assigned, etc.)
+    -->
+    <section class="card" id="push-test-section">
+      <h2 class="section-title">🔔 Test Push Notification</h2>
+      <p class="help-text">
+        Send a test notification from the server to all subscribed browsers.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="push-title">Title</label>
+        <input type="text" id="push-title" class="input" value="Todo Reminder" placeholder="Notification title">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="push-body">Message</label>
+        <input type="text" id="push-body" class="input" value="Don't forget your todos!" placeholder="Notification message">
+      </div>
+
+      <button id="btn-send-push" class="btn btn--primary btn--full">
+        📣 Send Push Notification
+      </button>
+
+      <p id="push-status" class="push-status"></p>
+    </section>
+
+  </main>
+
+  <!--
+    db.js must be loaded BEFORE app.js because app.js uses the database functions.
+    This is like PHP's require() — order matters.
+  -->
+  <script src="/db.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

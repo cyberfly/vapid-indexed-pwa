@@ -1,0 +1,10 @@
+[     860ms] [LOG] 🚀 Todo PWA starting... @ http://localhost:3000/app.js:60
+[     876ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:3000/:0
+[     881ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[    1009ms] [LOG] ✅ Service Worker registered: http://localhost:3000/ @ http://localhost:3000/app.js:103
+[    1018ms] [LOG] 📦 IndexedDB: Created todos object store @ http://localhost:3000/db.js:50
+[    1021ms] [LOG] ✅ App ready! @ http://localhost:3000/app.js:77
+[   24246ms] [LOG] ✅ Todo saved to IndexedDB with id: 1776144188950 @ http://localhost:3000/db.js:99
+[   24260ms] [LOG] ✅ Todo added: {id: 1776144188950, description: Buy groceries from the market, imageData: null, latitude: null, longitude: null} @ http://localhost:3000/app.js:508
+[   44312ms] [LOG] ✅ Todo saved to IndexedDB with id: 1776144209041 @ http://localhost:3000/db.js:99
+[   44313ms] [LOG] ✅ Todo added: {id: 1776144209041, description: Read PWA documentation, imageData: null, latitude: null, longitude: null} @ http://localhost:3000/app.js:508
