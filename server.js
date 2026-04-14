@@ -19,7 +19,7 @@ const fs        = require('fs');        // Built-in: read/write files
 const path      = require('path');      // Built-in: work with file paths
 
 const app  = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 4000; // Change port here, or run: PORT=8080 node server.js
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors());                          // Allow all cross-origin requests
